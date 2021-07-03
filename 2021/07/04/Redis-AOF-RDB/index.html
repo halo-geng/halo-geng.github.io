@@ -239,6 +239,7 @@
             
             <div class="markdown-body">
               <p>Redis作为一种高性能的内存数据库，将全部数据储存在内存当中，因此一旦发生服务器宕机或系统崩溃，存储的数据就会全部丢失。为了解决这一问题，Redis提供RDB和AOF两种持久化机制，将数据同步到磁盘中。当系统或服务器重启时，利用持久化文件即可恢复数据，有效的避免了数据丢失问题。</p>
+<hr>
 <h3 id="1-RDB持久化"><a href="#1-RDB持久化" class="headerlink" title="1 RDB持久化"></a>1 RDB持久化</h3><p>RDB持久化方式是通过快照（snapshotting）完成的，当符合一定条件时，redis会自动将内存中所有数据以二进制方式生成一份副本并存储在硬盘上。当redis重启时，redis会读取RDB持久化生成的二进制文件进行数据恢复。</p>
 <h4 id="1-1-RDB持久化的触发条件"><a href="#1-1-RDB持久化的触发条件" class="headerlink" title="1.1 RDB持久化的触发条件"></a>1.1 RDB持久化的触发条件</h4><h5 id="手动触发"><a href="#手动触发" class="headerlink" title="手动触发"></a>手动触发</h5><ul>
 <li><p>save命令触发</p>
@@ -265,6 +266,7 @@
 </ol>
 </li>
 </ul>
+<hr>
 <h3 id="2-AOF持久化"><a href="#2-AOF持久化" class="headerlink" title="2 AOF持久化"></a>2 AOF持久化</h3><p>除了RDB持久化功能外，Redis还提供了AOF持久化功能。与RDB持久化通过保存数据库中的键值对来记录数据库状态不同，AOF持久化是通过保存Redis服务器所执行的写命令来记录数据库状态的。</p>
 <h4 id="2-1-AOF持久化的实现"><a href="#2-1-AOF持久化的实现" class="headerlink" title="2.1 AOF持久化的实现"></a>2.1 AOF持久化的实现</h4><p>AOF 持久化功能的实现可以分为命令追加，文件写入，文件同步三个步骤。</p>
 <h5 id="命令追加"><a href="#命令追加" class="headerlink" title="命令追加"></a>命令追加</h5><p>当AOF持久化功能处于打开状态时，服务器在执行完一个写命令之后，会以协议格式将被执行的写命令追加到服务器状态的aof_buf缓冲区的末尾。其中aof_buf的定义位于redisServer结构体中。</p>
@@ -334,6 +336,7 @@
 </ol>
 </li>
 </ul>
+<hr>
 <h3 id="3-RDB-AOF混合持久化"><a href="#3-RDB-AOF混合持久化" class="headerlink" title="3 RDB-AOF混合持久化"></a>3 RDB-AOF混合持久化</h3><p>从redis4.0开始，添加了新的混合持久化方式，这里介绍的混合持久化就是同时结合RDB持久化以及AOF持久化混合写入AOF文件。这样做的好处是可以结合RDB和AOF的优点，快速加载同时避免丢失过多的数据，缺点是AOF里面的RDB部分就是压缩格式不再是AOF格式，可读性差。</p>
 <p>混合持久化同样也是通过bgrewriteAOF完成的，不同的是当开启混合持久化时，fork出的子进程先将共享的内存副本全量的以RDB方式写入AOF文件，然后在将重写缓冲区的增量命令以AOF方式写入到文件，写入完成后通知主进程更新统计信息，并将新的含有RDB格式和AOF格式的AOF文件替换旧的的AOF文件。简单的说，新的AOF文件前半段是RDB格式的全量数据，后半段是AOF格式的增量数据。</p>
 <p>当我们开启了混合持久化时，启动redis依然优先加载AOF文件，AOF文件加载可能有两种情况如下：</p>
@@ -379,6 +382,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/07/04/Redis-code/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[Redis] Redis持久化机制的源码分析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
