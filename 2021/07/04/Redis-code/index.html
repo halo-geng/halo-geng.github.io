@@ -14,7 +14,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
+  <meta name="description" content="文章基于Redis-4.0版本，介绍AOF持久化策略的具体实现过程，包括AOF持久化的触发，文件追加、写入、同步的代码实现，启动阶段的数据还原实现，AOF重写的触发与实现等。">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
@@ -239,6 +239,8 @@
             
             <div class="markdown-body">
               <p>文章基于Redis-4.0版本，介绍AOF持久化策略的具体实现过程，包括AOF持久化的触发，文件追加、写入、同步的代码实现，启动阶段的数据还原实现，AOF重写的触发与实现等。</p>
+<span id="more"></span>
+
 <hr>
 <h3 id="1-AOF持久化"><a href="#1-AOF持久化" class="headerlink" title="1 AOF持久化"></a>1 AOF持久化</h3><h4 id="1-1-AOF触发"><a href="#1-1-AOF触发" class="headerlink" title="1.1 AOF触发"></a>1.1 AOF触发</h4><p>Redis执行命令时都会先建立一个客户端，然后由客户端去和服务器连接， redis的命令执行中有一个核心部分，就是call()方法，call函数声明如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/* src/server.c/call() */</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">call</span><span class="hljs-params">(client *c, <span class="hljs-keyword">int</span> flags)</span></span><br></code></pre></td></tr></table></figure>

@@ -14,7 +14,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
+  <meta name="description" content="Redis作为一种高性能的内存数据库，将全部数据储存在内存当中，因此一旦发生服务器宕机或系统崩溃，存储的数据就会全部丢失。为了解决这一问题，Redis提供RDB和AOF两种持久化机制，将数据同步到磁盘中。当系统或服务器重启时，利用持久化文件即可恢复数据，有效的避免了数据丢失问题。">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
@@ -239,6 +239,8 @@
             
             <div class="markdown-body">
               <p>Redis作为一种高性能的内存数据库，将全部数据储存在内存当中，因此一旦发生服务器宕机或系统崩溃，存储的数据就会全部丢失。为了解决这一问题，Redis提供RDB和AOF两种持久化机制，将数据同步到磁盘中。当系统或服务器重启时，利用持久化文件即可恢复数据，有效的避免了数据丢失问题。</p>
+<span id="more"></span>
+
 <hr>
 <h3 id="1-RDB持久化"><a href="#1-RDB持久化" class="headerlink" title="1 RDB持久化"></a>1 RDB持久化</h3><p>RDB持久化方式是通过快照（snapshotting）完成的，当符合一定条件时，redis会自动将内存中所有数据以二进制方式生成一份副本并存储在硬盘上。当redis重启时，redis会读取RDB持久化生成的二进制文件进行数据恢复。</p>
 <h4 id="1-1-RDB持久化的触发条件"><a href="#1-1-RDB持久化的触发条件" class="headerlink" title="1.1 RDB持久化的触发条件"></a>1.1 RDB持久化的触发条件</h4><h5 id="手动触发"><a href="#手动触发" class="headerlink" title="手动触发"></a>手动触发</h5><ul>
