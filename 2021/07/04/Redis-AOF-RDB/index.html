@@ -252,6 +252,8 @@
 </li>
 </ul>
 <p><img src="/img/article/Redis/RDB%E6%8C%81%E4%B9%85%E5%8C%96bgsave%E8%BF%87%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="RDB持久化bgsave过程"></p>
+<img src="/img/article/Redis/RDB持久化bgsave过程.jpg" srcset="/img/loading.gif" lazyload alt="RDB持久化bgsave过程" style="zoom:80%;" />
+
 <h5 id="自动触发"><a href="#自动触发" class="headerlink" title="自动触发"></a>自动触发</h5><p>自动触发最常见的情况是在配置文件中通过save m n，指定当m秒内发生n次变化时，会触发bgsave。</p>
 <p>自动触发实际是在Redis内部一个定时器事件，每隔固定时间去检查当前数据发生的改变次数与时间是否满足配置的持久化触发的条件，如果满足则通过操作系统fork调用来创建出一个子进程，这个子进程默认会与父进程共享相同的地址空间，这时就可以通过子进程来遍历整个内存来进行存储操作，而主进程则仍然可以提供服务，当有写入时由操作系统按照内存页(page)为单位来进行copy-on-write保证父子进程之间不会互相影响。</p>
 <p>除了save m n以外，还有一些其他情况会触发bgsave， 在主从复制场景下，如果从节点执行全量复制操作，则主节点会执行bgsave命令，并将rdb文件发送给从节点。执行shutdown命令时，也会自动执行rdb持久化。</p>
