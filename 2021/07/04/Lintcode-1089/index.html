@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="常用命令 of Linux, Redis, Vim, Git, SSH and MarkDown">
+  <meta name="description" content="给定一个只包含三种类型字符的字符串：’(‘、’)’ 和 ‘*’，编写一个函数来检查该字符串是否有效。">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>[Notes] 常用命令 - 老君的借火岩</title>
+  <title>[LintCode] 1089 有效的括号字符串 - 老君的借火岩</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -163,9 +163,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="[Notes] 常用命令">
+            <span class="h2" id="subtitle" title="[LintCode] 1089 有效的括号字符串">
               
-                [Notes] 常用命令
+                [LintCode] 1089 有效的括号字符串
               
             </span>
 
@@ -175,8 +175,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-07-04 01:29" pubdate>
-        2021年7月4日 凌晨
+      <time datetime="2021-07-04 13:27" pubdate>
+        2021年7月4日 下午
       </time>
     </span>
   
@@ -235,134 +235,39 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[Notes] 常用命令</h1>
+            <h1 style="display: none">[LintCode] 1089 有效的括号字符串</h1>
             
             <div class="markdown-body">
-              <p>常用命令 of Linux, Redis, Vim, Git, SSH and MarkDown</p>
+              <p>给定一个只包含三种类型字符的字符串：’(‘、’)’ 和 ‘*’，编写一个函数来检查该字符串是否有效。</p>
 <span id="more"></span>
 
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><ul>
-<li>查看PCI-E插槽使用情况：dmidecode | grep -1 PCI</li>
-<li>查看显卡信息：lspci | grep -i vga</li>
-</ul>
-<ul>
-<li>复制粘贴文件：　　cp  [选项]  源文件或目录  目标文件或目录</li>
-<li>剪切粘贴文件：　　mv  [选项]  源文件或目录  目标文件或目录</li>
-</ul>
-<ul>
-<li>创建文件夹： mkdir</li>
-<li>删除文件：rm -rf 文件名   <ul>
-<li>//-r 就是向下递归，不管有多少级目录，一并删除</li>
-<li>//-f 就是直接强行删除，不作任何提示的意思）</li>
-</ul>
-</li>
-<li>查看文件系统： df</li>
-</ul>
-<ul>
-<li><p>压缩：tar -zcvf archive_name.tar.gz filename</p>
-</li>
-<li><p>解压缩：</p>
-<ul>
-<li>tar -zxvf archive_name.tar.gz (-C new_dir)</li>
-<li>unzip zipped_file.zip (-d unzipped_directory)</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>复制文件：</p>
-<ul>
-<li>cp dir1/a.doc dir2  表示将dir1下的a.doc文件复制到dir2目录下</li>
-<li>cp -r dir1 dir2     表示将dir1及其dir1下所包含的文件复制到dir2下</li>
-<li>cp -r dir1/. dir2   表示将dir1下的文件复制到dir2,不包括dir1目录</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>修改kernel配置参数：<ul>
-<li>目录：cd proc/sys/kernel</li>
-<li>修改：echo value &gt;修改项（不能使用vim，vim需要copy一份修改后在覆盖，权限不够）</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>查看各用户占用空间：sudo du -sh /home/*</li>
-</ul>
-<hr>
-<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><ul>
-<li>获取redis中所有的key：  redis 127.0.0.1:6379&gt; KEYS *</li>
-<li>删除数据库所有数据：FLUSHALL</li>
-<li>redis-server  直接启动</li>
-<li>redis-server  配置路径  如redis-server  /etc/redis.conf<br>这时候要后台启动的话就需要配置redis.conf中的daemonize no改为yes</li>
-<li>停止   redis-cli (-a 密码) -h 127.0.0.1 -p 6379 shutdown</li>
-<li>确认是否启动，使用  ps -ef|grep redis</li>
-<li>查看结点状态：INFO</li>
-<li>查看集群状态：CLUSTER INFO</li>
-<li>查看集群的槽：cluster slots</li>
-<li>redis集群，添加新节点：CLUSTER MEET 127.0.0.1 7002</li>
-<li>Redis清空数据库：flushall</li>
-</ul>
-<hr>
-<h3 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h3><ul>
-<li><p>有三个快捷键可以进入编辑模式，a i o</p>
-</li>
-<li><p>保存并退出，输入:wq</p>
-</li>
-<li><p>查找字符串，输入/或者？加需要查找的字符串，查看下一个，小写n，跳转到上一个，大写N</p>
-</li>
-<li><p>[Ctrl] + [f]    屏幕『向下』移动一页，相当于 [Page Down]按键<br>[Ctrl] + [b]    屏幕『向上』移动一页，相当于 [Page Up] 按键</p>
-</li>
-<li><p>:num   直接跳到第num行。</p>
-</li>
-<li><p>多行注释：</p>
-<ol>
-<li><p>进入命令行模式，按ctrl + v进入 visual block模式，然后按j, 或者k选中多行，把需要注释的行标记起来</p>
-</li>
-<li><p>按大写字母I，再插入注释符，例如//</p>
-</li>
-<li><p>按esc键就会全部注释了</p>
-</li>
-</ol>
-</li>
-<li><p>取消多行注释：</p>
-<ol>
-<li>进入命令行模式，按ctrl + v进入 visual block模式，按字母l横向选中列的个数，例如 // 需要选中2列</li>
-<li>按字母j，或者k选中注释符号</li>
-<li>按d键就可全部取消注释</li>
-</ol>
-</li>
-<li><p>定位到文件尾：G</p>
-</li>
-</ul>
-<hr>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><ul>
-<li>初始化：git init</li>
-<li>添加到github远程仓库：git remote add origin 仓库链接</li>
-<li>下载代码：git clone URL</li>
-<li>查看分支：git branch （-a 查看所有分支）</li>
-<li>切换分支：git checkout 分支名</li>
-<li>如果我们修改了本地的某个文件但是没有提交，这时我们用 $ git status可以看到提示</li>
-<li>批量提交修改：git add –all</li>
-<li>拉取：git pull</li>
-<li>上传：git push origin master</li>
-</ul>
-<hr>
-<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p>在终端连接ssh的断开关闭退出的方法</p>
-<ol>
-<li>输入logout    比较正式的退出方式</li>
-<li>输入exit        等同于方法1</li>
-<li>Ctrl + D        等同于方法1，方便快捷</li>
-</ol>
-<hr>
-<h3 id="MarkDown"><a href="#MarkDown" class="headerlink" title="MarkDown"></a>MarkDown</h3><ul>
-<li>上下标：</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">H&lt;sub&gt;<span class="hljs-number">2</span>&lt;/sub&gt;O  CO&lt;sub&gt;<span class="hljs-number">2</span>&lt;/sub&gt;<br>爆米&lt;sup&gt;TM&lt;/sup&gt;<br></code></pre></td></tr></table></figure>
 
-<p>显示效果为：H<sub>2</sub>O    CO<sub>2</sub>    爆米<sup>TM</sup></p>
-<ul>
-<li>显示空行：&amp;nbsp;</li>
-</ul>
 
+<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>给定一个只包含三种类型字符的字符串：’(‘、’)’ 和 ‘*’，编写一个函数来检查该字符串是否有效。我们通过以下规则定义字符串的有效性：</p>
+<ol>
+<li>任何左括号 ‘(‘ 必须有一个相应的右括号 ‘)’</li>
+<li>任何右括号 ‘)’ 必须有一个相应的左括号 ‘(‘</li>
+<li>左括号 ‘(‘ 必须在相应的右括号 ‘)’ 之前</li>
+<li>‘*’ 可以被视为单个右括号 ‘ )’ 或单个左括号 ‘(‘ 或空字符串</li>
+<li>空字符串也有效。</li>
+</ol>
+<h4 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h4><p>样例1：输入：”()”           输出：true<br>样例2：输入：”(*)”         输出：true          解释：’*‘看做是空<br>样例3：输入：”(*))”        输出：true          解释: ‘*’ 当作’(‘</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>遍历字符数组，遇到左括号，左括号索引放入左括号栈，遇到*号，索引放入star栈。当遇到右括号的时候，这就先优先从左括号出栈，如果左括号栈空了，再从star栈出栈。</p>
+<p>需要注意，*(这个情况，他不是有效括号。基于这个问题，栈就不能单纯的存字符括号和*号了，必须存放索引，当遍历完后，需要比较索引。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> lintcode;<br><br><span class="hljs-keyword">import</span> java.util.*;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">checkValidString</span><span class="hljs-params">(String s)</span> </span>&#123;<br>		<br>		Stack&lt;Integer&gt; leftParenthesis=<span class="hljs-keyword">new</span> Stack&lt;&gt; ();<span class="hljs-comment">//左括号</span><br>		Stack&lt;Integer&gt; starParenthesis=<span class="hljs-keyword">new</span> Stack&lt;&gt; ();<span class="hljs-comment">//星号</span><br>		<span class="hljs-keyword">char</span> []arr=s.toCharArray();<br>		<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;arr.length;i++) &#123;<br>			<span class="hljs-keyword">if</span>(arr[i]==<span class="hljs-string">&#x27;(&#x27;</span>)<br>				leftParenthesis.push(i);<br>			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(arr[i]==<span class="hljs-string">&#x27;*&#x27;</span>)<br>				starParenthesis.push(i);<br>			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(arr[i]==<span class="hljs-string">&#x27;)&#x27;</span>) &#123;<br>				<span class="hljs-keyword">if</span>(!leftParenthesis.isEmpty())<br>					leftParenthesis.pop();<br>				<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(!starParenthesis.isEmpty())<br>					starParenthesis.pop();<br>				<span class="hljs-keyword">else</span><br>					<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>			&#125;<br>			<span class="hljs-keyword">else</span><br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>		&#125;<br>		<br>		<span class="hljs-comment">//遍历完字符数组后，需要判断左括号栈，和*栈了。针对*（这中情况,左括号在*号的右边</span><br>		<span class="hljs-keyword">while</span>(!leftParenthesis.isEmpty()&amp;&amp;!starParenthesis.isEmpty()) &#123;<br>			<span class="hljs-keyword">if</span>(leftParenthesis.peek()&gt;starParenthesis.peek())<br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>			<span class="hljs-keyword">else</span> &#123;<br>				leftParenthesis.pop();<br>				starParenthesis.pop();<br>			&#125;<br>		&#125;<br>		<span class="hljs-comment">//最后只需要判断左括号是否有剩余。最后如果剩下的都是***,那都是有效括号空字符</span><br>		<span class="hljs-keyword">return</span> leftParenthesis.isEmpty();<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;<br>		Scanner in=<span class="hljs-keyword">new</span> Scanner(System.in);<br>		String s=in.nextLine();<br>		<span class="hljs-keyword">boolean</span> k=checkValidString(s);<br>		System.out.print(k);		<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><h5 id="Java-Stack类"><a href="#Java-Stack类" class="headerlink" title="Java Stack类"></a>Java Stack类</h5><p>栈是Vector的一个子类，它实现了一个标准的后进先出的栈；</p>
+<p>堆栈只定义了默认构造函数，用来创建一个空栈；</p>
+<p>堆栈除了包括由Vector定义的所有方法，也定义了自己的一些方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-comment">//测试堆栈是否为空。</span></span><br><span class="hljs-function">Object <span class="hljs-title">peek</span><span class="hljs-params">()</span><span class="hljs-comment">//查看堆栈顶部的对象，但不从堆栈中移除它。</span></span><br><span class="hljs-function">Object <span class="hljs-title">pop</span><span class="hljs-params">()</span><span class="hljs-comment">//移除堆栈顶部的对象，并作为此函数的值返回该对象。</span></span><br><span class="hljs-function">Object <span class="hljs-title">push</span><span class="hljs-params">(Object element)</span><span class="hljs-comment">//把项压入堆栈顶部。</span></span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">search</span><span class="hljs-params">(Object element)</span><span class="hljs-comment">//返回对象在堆栈中的位置，以 1 为基数。</span></span><br></code></pre></td></tr></table></figure>
+
+<h5 id="Java-输入输出流"><a href="#Java-输入输出流" class="headerlink" title="Java 输入输出流"></a>Java 输入输出流</h5><p>Java的输出函数很简单，直接调用System类的out对象的print函数即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">System.out.print(a);<span class="hljs-comment">//输出变量a的值</span><br>System.out.print(<span class="hljs-string">&quot;214214&quot;</span>);<span class="hljs-comment">//输出字符串</span><br>System.out.print(<span class="hljs-string">&quot;123&quot;</span>+a);<span class="hljs-comment">//混合输出字符串和变量值</span><br></code></pre></td></tr></table></figure>
+
+<p>Java的输入函数还是Scanner类最好用，它既可以读字符，也可以读字符串和整数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Scanner;<br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String [] args)</span> </span>&#123; <br>         Scanner sc = <span class="hljs-keyword">new</span> Scanner(System.in); <br>         System.out.println(<span class="hljs-string">&quot;请输入你的姓名：&quot;</span>); <br>         String name = sc.nextLine(); <br>         System.out.println(<span class="hljs-string">&quot;请输入你的年龄：&quot;</span>); <br>         <span class="hljs-keyword">int</span> age = sc.nextInt(); <br>         System.out.println(<span class="hljs-string">&quot;请输入你的工资：&quot;</span>); <br>         <span class="hljs-keyword">float</span> salary = sc.nextFloat(); <br>&#125;<br></code></pre></td></tr></table></figure>
             </div>
             <hr>
             <div>
@@ -371,7 +276,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Notes/">Notes</a>
+                      <a class="hover-with-bg" href="/categories/LintCode/">LintCode</a>
                     
                   </div>
                 
@@ -379,19 +284,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Command/">Command</a>
+                      <a class="hover-with-bg" href="/tags/String/">String</a>
                     
-                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
                     
-                      <a class="hover-with-bg" href="/tags/Vim/">Vim</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Git/">Git</a>
-                    
-                      <a class="hover-with-bg" href="/tags/SSH/">SSH</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
-                    
-                      <a class="hover-with-bg" href="/tags/MarkDown/">MarkDown</a>
+                      <a class="hover-with-bg" href="/tags/Algorithm/">Algorithm</a>
                     
                   </div>
                 
@@ -408,9 +305,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/07/04/Lintcode-1089/">
+                      <a href="/2021/07/04/Lintcode-3/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[LintCode] 1089 有效的括号字符串</span>
+                        <span class="hidden-mobile">[Lintcode] 3 统计数字</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -418,8 +315,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/07/04/Pycharm-PyQt5/">
-                        <span class="hidden-mobile">[Tutorial] Pycharm+PyQt5</span>
+                      <a href="/2021/07/04/note-command/">
+                        <span class="hidden-mobile">[Notes] 常用命令</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

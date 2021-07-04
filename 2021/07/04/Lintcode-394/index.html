@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="常用命令 of Linux, Redis, Vim, Git, SSH and MarkDown">
+  <meta name="description" content="有 n 个硬币排成一条线。两个参赛者轮流从右边依次拿走 1 或 2 个硬币，直到没有硬币为止。拿到最后一枚硬币的人获胜。请判定先手玩家必胜还是必败?">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>[Notes] 常用命令 - 老君的借火岩</title>
+  <title>[LintCode] 394 硬币排成线 - 老君的借火岩</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -163,9 +163,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="[Notes] 常用命令">
+            <span class="h2" id="subtitle" title="[LintCode] 394 硬币排成线">
               
-                [Notes] 常用命令
+                [LintCode] 394 硬币排成线
               
             </span>
 
@@ -175,8 +175,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-07-04 01:29" pubdate>
-        2021年7月4日 凌晨
+      <time datetime="2021-07-04 13:28" pubdate>
+        2021年7月4日 下午
       </time>
     </span>
   
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      860 字
+      558 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      6
        分钟
     </span>
   
@@ -235,133 +235,42 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[Notes] 常用命令</h1>
+            <h1 style="display: none">[LintCode] 394 硬币排成线</h1>
             
             <div class="markdown-body">
-              <p>常用命令 of Linux, Redis, Vim, Git, SSH and MarkDown</p>
+              <p>有 n 个硬币排成一条线。两个参赛者轮流从右边依次拿走 1 或 2 个硬币，直到没有硬币为止。拿到最后一枚硬币的人获胜。请判定先手玩家必胜还是必败?</p>
 <span id="more"></span>
 
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><ul>
-<li>查看PCI-E插槽使用情况：dmidecode | grep -1 PCI</li>
-<li>查看显卡信息：lspci | grep -i vga</li>
-</ul>
-<ul>
-<li>复制粘贴文件：　　cp  [选项]  源文件或目录  目标文件或目录</li>
-<li>剪切粘贴文件：　　mv  [选项]  源文件或目录  目标文件或目录</li>
-</ul>
-<ul>
-<li>创建文件夹： mkdir</li>
-<li>删除文件：rm -rf 文件名   <ul>
-<li>//-r 就是向下递归，不管有多少级目录，一并删除</li>
-<li>//-f 就是直接强行删除，不作任何提示的意思）</li>
-</ul>
-</li>
-<li>查看文件系统： df</li>
-</ul>
-<ul>
-<li><p>压缩：tar -zcvf archive_name.tar.gz filename</p>
-</li>
-<li><p>解压缩：</p>
-<ul>
-<li>tar -zxvf archive_name.tar.gz (-C new_dir)</li>
-<li>unzip zipped_file.zip (-d unzipped_directory)</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>复制文件：</p>
-<ul>
-<li>cp dir1/a.doc dir2  表示将dir1下的a.doc文件复制到dir2目录下</li>
-<li>cp -r dir1 dir2     表示将dir1及其dir1下所包含的文件复制到dir2下</li>
-<li>cp -r dir1/. dir2   表示将dir1下的文件复制到dir2,不包括dir1目录</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>修改kernel配置参数：<ul>
-<li>目录：cd proc/sys/kernel</li>
-<li>修改：echo value &gt;修改项（不能使用vim，vim需要copy一份修改后在覆盖，权限不够）</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>查看各用户占用空间：sudo du -sh /home/*</li>
-</ul>
-<hr>
-<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><ul>
-<li>获取redis中所有的key：  redis 127.0.0.1:6379&gt; KEYS *</li>
-<li>删除数据库所有数据：FLUSHALL</li>
-<li>redis-server  直接启动</li>
-<li>redis-server  配置路径  如redis-server  /etc/redis.conf<br>这时候要后台启动的话就需要配置redis.conf中的daemonize no改为yes</li>
-<li>停止   redis-cli (-a 密码) -h 127.0.0.1 -p 6379 shutdown</li>
-<li>确认是否启动，使用  ps -ef|grep redis</li>
-<li>查看结点状态：INFO</li>
-<li>查看集群状态：CLUSTER INFO</li>
-<li>查看集群的槽：cluster slots</li>
-<li>redis集群，添加新节点：CLUSTER MEET 127.0.0.1 7002</li>
-<li>Redis清空数据库：flushall</li>
-</ul>
-<hr>
-<h3 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h3><ul>
-<li><p>有三个快捷键可以进入编辑模式，a i o</p>
-</li>
-<li><p>保存并退出，输入:wq</p>
-</li>
-<li><p>查找字符串，输入/或者？加需要查找的字符串，查看下一个，小写n，跳转到上一个，大写N</p>
-</li>
-<li><p>[Ctrl] + [f]    屏幕『向下』移动一页，相当于 [Page Down]按键<br>[Ctrl] + [b]    屏幕『向上』移动一页，相当于 [Page Up] 按键</p>
-</li>
-<li><p>:num   直接跳到第num行。</p>
-</li>
-<li><p>多行注释：</p>
-<ol>
-<li><p>进入命令行模式，按ctrl + v进入 visual block模式，然后按j, 或者k选中多行，把需要注释的行标记起来</p>
-</li>
-<li><p>按大写字母I，再插入注释符，例如//</p>
-</li>
-<li><p>按esc键就会全部注释了</p>
-</li>
-</ol>
-</li>
-<li><p>取消多行注释：</p>
-<ol>
-<li>进入命令行模式，按ctrl + v进入 visual block模式，按字母l横向选中列的个数，例如 // 需要选中2列</li>
-<li>按字母j，或者k选中注释符号</li>
-<li>按d键就可全部取消注释</li>
-</ol>
-</li>
-<li><p>定位到文件尾：G</p>
-</li>
-</ul>
-<hr>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><ul>
-<li>初始化：git init</li>
-<li>添加到github远程仓库：git remote add origin 仓库链接</li>
-<li>下载代码：git clone URL</li>
-<li>查看分支：git branch （-a 查看所有分支）</li>
-<li>切换分支：git checkout 分支名</li>
-<li>如果我们修改了本地的某个文件但是没有提交，这时我们用 $ git status可以看到提示</li>
-<li>批量提交修改：git add –all</li>
-<li>拉取：git pull</li>
-<li>上传：git push origin master</li>
-</ul>
-<hr>
-<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p>在终端连接ssh的断开关闭退出的方法</p>
-<ol>
-<li>输入logout    比较正式的退出方式</li>
-<li>输入exit        等同于方法1</li>
-<li>Ctrl + D        等同于方法1，方便快捷</li>
-</ol>
-<hr>
-<h3 id="MarkDown"><a href="#MarkDown" class="headerlink" title="MarkDown"></a>MarkDown</h3><ul>
-<li>上下标：</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">H&lt;sub&gt;<span class="hljs-number">2</span>&lt;/sub&gt;O  CO&lt;sub&gt;<span class="hljs-number">2</span>&lt;/sub&gt;<br>爆米&lt;sup&gt;TM&lt;/sup&gt;<br></code></pre></td></tr></table></figure>
 
-<p>显示效果为：H<sub>2</sub>O    CO<sub>2</sub>    爆米<sup>TM</sup></p>
-<ul>
-<li>显示空行：&amp;nbsp;</li>
-</ul>
+
+<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>有 n 个硬币排成一条线。两个参赛者轮流从右边依次拿走 1 或 2 个硬币，直到没有硬币为止。拿到最后一枚硬币的人获胜。</p>
+<p>请判定先手玩家必胜还是必败?</p>
+<p>若必胜，返回true，否则返回false。</p>
+<h4 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h4><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: 1</span><br><span class="hljs-section">输出: true</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">输入: 4</span><br><span class="hljs-section">输出: true</span><br><span class="hljs-section">解释: 先手玩家第一轮拿走一个硬币，此时还剩三个，这时无论后手玩家拿一个还是两个，下一次先手玩家都可以把剩下的硬币拿完。</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="挑战"><a href="#挑战" class="headerlink" title="挑战"></a><strong>挑战</strong></h4><p>O(1) 时间复杂度且O(1) 存储。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>博弈论问题：</p>
+<p>有 n 个硬币排成一条线。两个参赛者 A 和 B 轮流从右边依次拿走 1 或 2 个硬币，直到没有硬币为止。拿到最后一枚硬币的人获胜。</p>
+<p>当n=1时，A必胜（拿1个）；</p>
+<p>当n=2时，A必胜（拿2个）；</p>
+<p>当n=3时，A必败（A不管拿1个还是2个，B都可以将剩下的棋子一次拿完）；</p>
+<p>当n=4时，A必胜（A拿1个，剩3个，转化为B先手必败）；</p>
+<p>当n=5时，A必胜（A拿2个，同上）；</p>
+<p>当n=6时，A必败（A不管拿1个还是2个，B都可以将棋子拿到只剩3个，转化为A先手必败）；</p>
+<p>……</p>
+<p>当n=9时，A必败（A不管拿1个还是2个，B都可以将棋子拿到只剩6个，转化为A先手必败）；</p>
+<p>综上，</p>
+<p>当n%3 == 0时，A不管拿1个还是2个，B都可以将棋子转化为A先手必败的情况；</p>
+<p>同样，当n%3 != 0时，A都可以将棋子转化为B先手必败的情况。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * @param n: An integer</span><br><span class="hljs-comment">     * @return: A boolean which equals to true if the first player will win</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">firstWillWin</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;<br>        <span class="hljs-comment">// write your code here</span><br>        <span class="hljs-keyword">if</span>(n%<span class="hljs-number">3</span> == <span class="hljs-number">0</span>)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>关于博弈论问题的总结，见<a target="_blank" rel="noopener" href="https://www.cnblogs.com/Wolfycz/p/8430991.html">浅谈算法——博弈论</a></p>
 
             </div>
             <hr>
@@ -371,7 +280,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Notes/">Notes</a>
+                      <a class="hover-with-bg" href="/categories/LintCode/">LintCode</a>
                     
                   </div>
                 
@@ -379,19 +288,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Command/">Command</a>
+                      <a class="hover-with-bg" href="/tags/Algorithm/">Algorithm</a>
                     
-                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Vim/">Vim</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Git/">Git</a>
-                    
-                      <a class="hover-with-bg" href="/tags/SSH/">SSH</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
-                    
-                      <a class="hover-with-bg" href="/tags/MarkDown/">MarkDown</a>
+                      <a class="hover-with-bg" href="/tags/Math/">Math</a>
                     
                   </div>
                 
@@ -408,9 +307,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/07/04/Lintcode-1089/">
+                      <a href="/2021/07/04/Lintcode-4/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[LintCode] 1089 有效的括号字符串</span>
+                        <span class="hidden-mobile">[LintCode] 4 丑数Ⅱ</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -418,8 +317,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/07/04/Pycharm-PyQt5/">
-                        <span class="hidden-mobile">[Tutorial] Pycharm+PyQt5</span>
+                      <a href="/2021/07/04/Lintcode-3/">
+                        <span class="hidden-mobile">[Lintcode] 3 统计数字</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

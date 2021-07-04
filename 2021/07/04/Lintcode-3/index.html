@@ -14,11 +14,11 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="常用命令 of Linux, Redis, Vim, Git, SSH and MarkDown">
+  <meta name="description" content="计算数字 k 在 0 到 n 中的出现的次数，k 可能是 0~9 的一个值。">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>[Notes] 常用命令 - 老君的借火岩</title>
+  <title>[Lintcode] 3 统计数字 - 老君的借火岩</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -163,9 +163,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="[Notes] 常用命令">
+            <span class="h2" id="subtitle" title="[Lintcode] 3 统计数字">
               
-                [Notes] 常用命令
+                [Lintcode] 3 统计数字
               
             </span>
 
@@ -175,8 +175,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-07-04 01:29" pubdate>
-        2021年7月4日 凌晨
+      <time datetime="2021-07-04 13:27" pubdate>
+        2021年7月4日 下午
       </time>
     </span>
   
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      860 字
+      808 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      11
        分钟
     </span>
   
@@ -235,133 +235,50 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">[Notes] 常用命令</h1>
+            <h1 style="display: none">[Lintcode] 3 统计数字</h1>
             
             <div class="markdown-body">
-              <p>常用命令 of Linux, Redis, Vim, Git, SSH and MarkDown</p>
+              <p>计算数字 k 在 0 到 n 中的出现的次数，k 可能是 0~9 的一个值。</p>
 <span id="more"></span>
 
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><ul>
-<li>查看PCI-E插槽使用情况：dmidecode | grep -1 PCI</li>
-<li>查看显卡信息：lspci | grep -i vga</li>
-</ul>
-<ul>
-<li>复制粘贴文件：　　cp  [选项]  源文件或目录  目标文件或目录</li>
-<li>剪切粘贴文件：　　mv  [选项]  源文件或目录  目标文件或目录</li>
-</ul>
-<ul>
-<li>创建文件夹： mkdir</li>
-<li>删除文件：rm -rf 文件名   <ul>
-<li>//-r 就是向下递归，不管有多少级目录，一并删除</li>
-<li>//-f 就是直接强行删除，不作任何提示的意思）</li>
-</ul>
-</li>
-<li>查看文件系统： df</li>
-</ul>
-<ul>
-<li><p>压缩：tar -zcvf archive_name.tar.gz filename</p>
-</li>
-<li><p>解压缩：</p>
-<ul>
-<li>tar -zxvf archive_name.tar.gz (-C new_dir)</li>
-<li>unzip zipped_file.zip (-d unzipped_directory)</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>复制文件：</p>
-<ul>
-<li>cp dir1/a.doc dir2  表示将dir1下的a.doc文件复制到dir2目录下</li>
-<li>cp -r dir1 dir2     表示将dir1及其dir1下所包含的文件复制到dir2下</li>
-<li>cp -r dir1/. dir2   表示将dir1下的文件复制到dir2,不包括dir1目录</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>修改kernel配置参数：<ul>
-<li>目录：cd proc/sys/kernel</li>
-<li>修改：echo value &gt;修改项（不能使用vim，vim需要copy一份修改后在覆盖，权限不够）</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>查看各用户占用空间：sudo du -sh /home/*</li>
-</ul>
-<hr>
-<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><ul>
-<li>获取redis中所有的key：  redis 127.0.0.1:6379&gt; KEYS *</li>
-<li>删除数据库所有数据：FLUSHALL</li>
-<li>redis-server  直接启动</li>
-<li>redis-server  配置路径  如redis-server  /etc/redis.conf<br>这时候要后台启动的话就需要配置redis.conf中的daemonize no改为yes</li>
-<li>停止   redis-cli (-a 密码) -h 127.0.0.1 -p 6379 shutdown</li>
-<li>确认是否启动，使用  ps -ef|grep redis</li>
-<li>查看结点状态：INFO</li>
-<li>查看集群状态：CLUSTER INFO</li>
-<li>查看集群的槽：cluster slots</li>
-<li>redis集群，添加新节点：CLUSTER MEET 127.0.0.1 7002</li>
-<li>Redis清空数据库：flushall</li>
-</ul>
-<hr>
-<h3 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h3><ul>
-<li><p>有三个快捷键可以进入编辑模式，a i o</p>
-</li>
-<li><p>保存并退出，输入:wq</p>
-</li>
-<li><p>查找字符串，输入/或者？加需要查找的字符串，查看下一个，小写n，跳转到上一个，大写N</p>
-</li>
-<li><p>[Ctrl] + [f]    屏幕『向下』移动一页，相当于 [Page Down]按键<br>[Ctrl] + [b]    屏幕『向上』移动一页，相当于 [Page Up] 按键</p>
-</li>
-<li><p>:num   直接跳到第num行。</p>
-</li>
-<li><p>多行注释：</p>
-<ol>
-<li><p>进入命令行模式，按ctrl + v进入 visual block模式，然后按j, 或者k选中多行，把需要注释的行标记起来</p>
-</li>
-<li><p>按大写字母I，再插入注释符，例如//</p>
-</li>
-<li><p>按esc键就会全部注释了</p>
-</li>
-</ol>
-</li>
-<li><p>取消多行注释：</p>
-<ol>
-<li>进入命令行模式，按ctrl + v进入 visual block模式，按字母l横向选中列的个数，例如 // 需要选中2列</li>
-<li>按字母j，或者k选中注释符号</li>
-<li>按d键就可全部取消注释</li>
-</ol>
-</li>
-<li><p>定位到文件尾：G</p>
-</li>
-</ul>
-<hr>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><ul>
-<li>初始化：git init</li>
-<li>添加到github远程仓库：git remote add origin 仓库链接</li>
-<li>下载代码：git clone URL</li>
-<li>查看分支：git branch （-a 查看所有分支）</li>
-<li>切换分支：git checkout 分支名</li>
-<li>如果我们修改了本地的某个文件但是没有提交，这时我们用 $ git status可以看到提示</li>
-<li>批量提交修改：git add –all</li>
-<li>拉取：git pull</li>
-<li>上传：git push origin master</li>
-</ul>
-<hr>
-<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p>在终端连接ssh的断开关闭退出的方法</p>
-<ol>
-<li>输入logout    比较正式的退出方式</li>
-<li>输入exit        等同于方法1</li>
-<li>Ctrl + D        等同于方法1，方便快捷</li>
-</ol>
-<hr>
-<h3 id="MarkDown"><a href="#MarkDown" class="headerlink" title="MarkDown"></a>MarkDown</h3><ul>
-<li>上下标：</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">H&lt;sub&gt;<span class="hljs-number">2</span>&lt;/sub&gt;O  CO&lt;sub&gt;<span class="hljs-number">2</span>&lt;/sub&gt;<br>爆米&lt;sup&gt;TM&lt;/sup&gt;<br></code></pre></td></tr></table></figure>
 
-<p>显示效果为：H<sub>2</sub>O    CO<sub>2</sub>    爆米<sup>TM</sup></p>
-<ul>
-<li>显示空行：&amp;nbsp;</li>
-</ul>
+
+<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>计算数字 k 在 0 到 n 中的出现的次数，k 可能是 0~9 的一个值。</p>
+<h4 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h4><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">k</span> = <span class="hljs-number">1</span>, <span class="hljs-attr">n</span> = <span class="hljs-number">1</span><br>输出：<span class="hljs-number">1</span><br>解释：在[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>]中，我们发现<span class="hljs-number">1</span>出现了<span class="hljs-number">1</span>次(<span class="hljs-number">1</span>)。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：k = <span class="hljs-number">1</span>, n = <span class="hljs-number">12</span><br>输出：<span class="hljs-number">5</span><br>解释：在[<span class="hljs-number">0,1,2,3</span>,<span class="hljs-number">4,5,6,7</span>,<span class="hljs-number">8,9,10,11</span>,<span class="hljs-number">12</span>]中，我们发现<span class="hljs-number">1</span>出现了<span class="hljs-number">5</span>次(<span class="hljs-number">1,10,11,12</span>)(注意<span class="hljs-number">11</span>中有两个<span class="hljs-number">1</span>)。<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>以k = 5为例：</p>
+<p>每10位产生1个数，[0,9]有一个5，[10,19]有一个15，[20,29]有一个25</p>
+<p>每100位产生10个数，[0,99]有10个5，即[50,59]，[100,199]有10个5，即[150,159]</p>
+<p>每1000位产生100个数，[0,999]有100个5，即[500,599]</p>
+<p>以此类推……</p>
+<p>当 n = 2169，k = 1 时：</p>
+<p>个位：9前面有216个10，故有216个1，又因为9&gt;1，所以一共有216+1=217个1</p>
+<p>十位：6前面有21个100，100中有10个1，故有21*10=210个1，又因为6&gt;1，所以包含了10~19的10个1，一共有210+10=220个1</p>
+<p>百位：1前面有2个1000，1000中有100个1，故有2*100=200个1，这里1==1，也就是多了100~169一共70个1，一共有200+70=270个1</p>
+<p>千位：2&gt;1，包含了1000~1999的1000个1</p>
+<p>一共有217+220+270+1000=1707个1</p>
+<p>但当 k = 0 时的情况不同，当 n = 2169，k = 0 时：</p>
+<p>个位：9前面有216个10，故有216个0，又因为9&gt;0，所以一共有216+1=217个0</p>
+<p>十位：6前面有21个100，100中有10个0，故有21*10=210个0，但00<del>09的情况不存在，故只有210-10=200个0，又因为6&gt;0，所以包含了00</del>09的10个0，一共有200+10=210个0</p>
+<p>百位：1前面有2个1000，1000中有100个0，故有2*100=200个1，但000<del>099的情况不存在，故只有200-100=100个0，这里1&gt;0，所以包含了000</del>099的100个0，一共有100+100=200个0</p>
+<p>千位：2&gt;0，但0000~0999的情况不存在</p>
+<p>一共有217+210+200=627个0</p>
+<p>因此，当计算从右往左数第 i位包含 k 的个数时：</p>
+<p>若第 i 位大于k，则结果为**第 i 位左边所有数字乘以10<sup>i-1</sup>次方 **+ <strong>10<sup>i-1</sup>次方</strong></p>
+<p>若第 i 位小于k，则结果为<strong>第 i 位左边的所有数字乘以10<sup>i-1</sup>次方</strong></p>
+<p>若第 i 位等于k，则结果为**第 i 位左边所有数字乘以10<sup>i-1</sup>次方 **+ <strong>右边的所有数字</strong>+<strong>1</strong></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * @param k: An integer</span><br><span class="hljs-comment">     * @param n: An integer</span><br><span class="hljs-comment">     * @return: An integer denote the count of digit k in 1..n</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">digitCounts</span><span class="hljs-params">(<span class="hljs-keyword">int</span> k, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<br>        <span class="hljs-comment">// write your code here</span><br>        <span class="hljs-keyword">int</span> bit=<span class="hljs-number">1</span>;<span class="hljs-comment">//当前位的权重</span><br>        <span class="hljs-keyword">int</span> bitnum=<span class="hljs-number">0</span>;<span class="hljs-comment">//当前位的具体数字</span><br>        <span class="hljs-keyword">int</span> sum=<span class="hljs-number">0</span>;<span class="hljs-comment">//k出现的总次数</span><br>        <span class="hljs-keyword">int</span> val=n;<span class="hljs-comment">//赋值val用于计算每位</span><br>        <span class="hljs-keyword">int</span> t=<span class="hljs-number">0</span>;<span class="hljs-comment">//处理k=0时候的情况，t为要减去的情况之和</span><br>    <br>        <span class="hljs-keyword">if</span>(n==k)<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        <br>        <span class="hljs-keyword">while</span>(val!=<span class="hljs-number">0</span>)<br>        &#123;<br>            bitnum=val-(val/<span class="hljs-number">10</span>)*<span class="hljs-number">10</span>;<br>            <span class="hljs-keyword">if</span>(bitnum&lt;k)<br>                sum+=(val/<span class="hljs-number">10</span>)*bit;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(bitnum==k)<br>                sum+=(val/<span class="hljs-number">10</span>)*bit+n-val*bit+<span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">else</span><br>                sum+=(val/<span class="hljs-number">10</span>)*bit+bit;<br>            t+=bit;<br>            bit*=<span class="hljs-number">10</span>;<br>            val/=<span class="hljs-number">10</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(k==<span class="hljs-number">0</span>)<br>        &#123;<br>            sum-=(t<span class="hljs-number">-1</span>);<span class="hljs-comment">//减1是去掉bit为1时的情况，即0的情况存在</span><br>        &#125;<br>        <span class="hljs-keyword">return</span> sum;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Flag_died/article/details/104062613">https://blog.csdn.net/Flag_died/article/details/104062613</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42316707/article/details/86510114">https://blog.csdn.net/weixin_42316707/article/details/86510114</a></li>
+</ol>
 
             </div>
             <hr>
@@ -371,7 +288,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Notes/">Notes</a>
+                      <a class="hover-with-bg" href="/categories/LintCode/">LintCode</a>
                     
                   </div>
                 
@@ -379,19 +296,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Command/">Command</a>
+                      <a class="hover-with-bg" href="/tags/String/">String</a>
                     
-                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                      <a class="hover-with-bg" href="/tags/Algorithm/">Algorithm</a>
                     
-                      <a class="hover-with-bg" href="/tags/Vim/">Vim</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Git/">Git</a>
-                    
-                      <a class="hover-with-bg" href="/tags/SSH/">SSH</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
-                    
-                      <a class="hover-with-bg" href="/tags/MarkDown/">MarkDown</a>
+                      <a class="hover-with-bg" href="/tags/Count/">Count</a>
                     
                   </div>
                 
@@ -408,9 +317,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/07/04/Lintcode-1089/">
+                      <a href="/2021/07/04/Lintcode-394/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[LintCode] 1089 有效的括号字符串</span>
+                        <span class="hidden-mobile">[LintCode] 394 硬币排成线</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -418,8 +327,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/07/04/Pycharm-PyQt5/">
-                        <span class="hidden-mobile">[Tutorial] Pycharm+PyQt5</span>
+                      <a href="/2021/07/04/Lintcode-1089/">
+                        <span class="hidden-mobile">[LintCode] 1089 有效的括号字符串</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
