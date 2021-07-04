@@ -16,7 +16,10 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
+  <meta name="description" content="July 1 - LCP 07. 传递信息
+July 2 - 1833. 雪糕的最大数量
+July 3 - 根据字符出现频率排序
+July 4 - 645. 错误的集合">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
@@ -189,7 +192,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.2k 字
+      3.3k 字
     </span>
   
 
@@ -199,7 +202,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      41
+      42
        分钟
     </span>
   
@@ -240,7 +243,11 @@
             <h1 style="display: none">[LeetCode] 每日一题 July 1~10</h1>
             
             <div class="markdown-body">
-              <span id="more"></span>
+              <p>July 1 - LCP 07. 传递信息</p>
+<p>July 2 - 1833. 雪糕的最大数量</p>
+<p>July 3 - 根据字符出现频率排序</p>
+<p>July 4 - 645. 错误的集合</p>
+<span id="more"></span>
 
 <h3 id="July-1-LCP-07-传递信息"><a href="#July-1-LCP-07-传递信息" class="headerlink" title="July 1 - LCP 07. 传递信息"></a>July 1 - LCP 07. 传递信息</h3><h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>小朋友 A 在和 ta 的小伙伴们玩传信息游戏，游戏规则如下：</p>
 <ul>
@@ -265,11 +272,9 @@
 <h5 id="方法三：动态规划"><a href="#方法三：动态规划" class="headerlink" title="方法三：动态规划"></a>方法三：动态规划</h5><p>这道题是计数问题，可以使用动态规划的方法解决。</p>
 <p>定义动态规划的状态 dp[i][j]为经过 i 轮传递到编号 j 的玩家的方案数，其中 0≤i≤k，0≤j&lt;n。</p>
 <p>由于从编号 0 的玩家开始传递，当 i=0 时，一定位于编号 0 的玩家，不会传递到其他玩家，因此动态规划的边界情况如下：</p>
-<img src="../../../../实验室/笔记/LeetCode/每日一题July.assets/image-20210701213904825.png" srcset="/img/loading.gif" lazyload alt="image-20210701213904825" style="zoom: 67%;" />
-
+<p><img src="/imag/article/LeetCode/image-20210701213904825.png" srcset="/img/loading.gif" lazyload></p>
 <p>对于传信息的关系 [src,dst]，如果第 i轮传递到编号 src 的玩家，则第 i+1 轮可以从编号 src 的玩家传递到编号 dst 的玩家。因此在计算 dp[i+1][dst] 时，需要考虑可以传递到编号 dst 的所有玩家。由此可以得到动态规划的状态转移方程，其中 0≤i&lt;k：</p>
-<img src="../../../../实验室/笔记/LeetCode/每日一题July.assets/image-20210701214033003.png" srcset="/img/loading.gif" lazyload alt="image-20210701214033003" style="zoom: 67%;" />
-
+<p><img src="/imag/article/LeetCode/image-20210701214033003.png" srcset="/img/loading.gif" lazyload></p>
 <p>最终得到 dp[k][n−1] 即为总的方案数。</p>
 <p>时间复杂度：O(km)。其中 m为 relation 数组的长度。</p>
 <p>空间复杂度是 O(kn)。由于当 i&gt;0 时，dp[i][] 的值只和dp[i−1][] 的值有关，因此可以将二维数组变成一维数组，将空间复杂度优化到 O(n)。</p>
