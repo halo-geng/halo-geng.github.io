@@ -21,6 +21,9 @@ July 1 - LCP 07. 传递信息；
 July 2 - 1833. 雪糕的最大数量；
 July 3 - 根据字符出现频率排序；
 July 4 - 645. 错误的集合；
+July 5 - 726. 原子的数量；
+July 6 - 1418. 点菜展示表；
+July 7 - 1711. 大餐计数
 ">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
@@ -194,7 +197,7 @@ July 4 - 645. 错误的集合；
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.3k 字
+      4.2k 字
     </span>
   
 
@@ -204,7 +207,7 @@ July 4 - 645. 错误的集合；
       <i class="iconfont icon-clock-fill"></i>
       
       
-      42
+      53
        分钟
     </span>
   
@@ -250,6 +253,9 @@ July 4 - 645. 错误的集合；
 <li>July 2 - 1833. 雪糕的最大数量；</li>
 <li>July 3 - 根据字符出现频率排序；</li>
 <li>July 4 - 645. 错误的集合；</li>
+<li>July 5 - 726. 原子的数量；</li>
+<li>July 6 - 1418. 点菜展示表；</li>
+<li>July 7 - 1711. 大餐计数</li>
 </ul>
 <span id="more"></span>
 
@@ -366,6 +372,33 @@ July 4 - 645. 错误的集合；
 <h4 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h4><ul>
 <li>注意数组边界，前后两个数字相比时，注意后面一个数字不要越界</li>
 <li>注意特殊情况，当缺少1或者n时的特殊处理</li>
+</ul>
+<hr>
+<h3 id="July-5-726-原子的数量"><a href="#July-5-726-原子的数量" class="headerlink" title="July 5 - 726. 原子的数量"></a>July 5 - 726. 原子的数量</h3><hr>
+<h3 id="July-6-1418-点菜展示表"><a href="#July-6-1418-点菜展示表" class="headerlink" title="July 6 - 1418. 点菜展示表"></a>July 6 - 1418. 点菜展示表</h3><hr>
+<h3 id="July-7-1711-大餐计数"><a href="#July-7-1711-大餐计数" class="headerlink" title="July 7 - 1711. 大餐计数"></a>July 7 - 1711. 大餐计数</h3><h4 id="描述-4"><a href="#描述-4" class="headerlink" title="描述"></a>描述</h4><p>大餐 是指 恰好包含两道不同餐品 的一餐，其美味程度之和等于 2 的幂。</p>
+<p>你可以搭配 任意 两道餐品做一顿大餐。</p>
+<p>给你一个整数数组 deliciousness ，其中 deliciousness[i] 是第 i 道餐品的美味程度，返回你可以用数组中的餐品做出的不同 大餐 的数量。结果需要对 109 + 7 取余。</p>
+<p>注意，只要餐品下标不同，就可以认为是不同的餐品，即便它们的美味程度相同。</p>
+<h4 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h4><figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tap">输入：deliciousness = [1,3,5,7,9]<br>输出：4<br>解释：大餐的美味程度组合为 (1,3) 、(1,7) 、(3,5) 和 (7,9) 。<br>它们各自的美味程度之和分别为<span class="hljs-number"> 4 </span>、8 、8 和<span class="hljs-number"> 16 </span>，都是<span class="hljs-number"> 2 </span>的幂。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs tap">输入：deliciousness = [1,1,1,3,3,3,7]<br>输出：15<br>解释：大餐的美味程度组合为<span class="hljs-number"> 3 </span>种 (1,1) ，9 种 (1,3) ，和<span class="hljs-number"> 3 </span>种 (1,7) 。<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h4><p>朴素的解法是遍历数组 deliciousness 中的每对元素，对于每对元素，计算两个元素之和是否等于 2 的幂。该解法的时间复杂度为 O(n^2)，会超出时间限制。</p>
+<p>上述朴素解法存在同一个元素被重复计算的情况，因此可以使用哈希表减少重复计算，降低时间复杂度。具体做法是，使用哈希表存储数组中的每个元素的出现次数，遍历到数组 deliciousness 中的某个元素时，在哈希表中寻找与当前元素的和等于 2 的幂的元素个数，然后用当前元素更新哈希表。由于遍历数组时，哈希表中已有的元素的下标一定小于当前元素的下标，因此任意一对元素之和等于 2 的幂的元素都不会被重复计算。</p>
+<p>令 maxVal 表示数组 deliciousness 中的最大元素，则数组中的任意两个元素之和都不会超过   maxVal×2。令 maxSum=maxVal×2，则任意一顿大餐的美味程度之和为不超过 maxSum 的某个 2 的幂。</p>
+<p>对于某个特定的 2 的幂 sum，可以在 O(n) 的时间内计算数组 deliciousness 中元素之和等于 sum 的元素对的数量。数组 deliciousness 中的最大元素 maxVal 满足 maxVal≤C，其中 C=2^20，则不超过 maxSum 的 2 的幂有 O(logmaxSum)=O(logmaxVal)=O(logC) 个，因此可以在 O(nlogC) 的时间内计算数组 deliciousness 中的大餐数量。</p>
+<p>时间复杂度：O(nlogC)，其中 n 是数组 deliciousness 的长度，C 是数组 deliciousness 中的元素值上限，这道题中 C=2^20 。需要遍历数组 deliciousness 一次，对于其中的每个元素，需要 O(logC) 的时间计算包含该元素的大餐数量，因此总时间复杂度是 O(nlogC)。</p>
+<p>空间复杂度：O(n)，其中 n 是数组 deliciousness 的长度。需要创建哈希表，哈希表的大小不超过 n。</p>
+<h4 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">countPairs</span><span class="hljs-params">(vector&lt;<span class="hljs-keyword">int</span>&gt;&amp; deliciousness)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">1000000007</span>;<br>        <span class="hljs-keyword">int</span> result = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">int</span> maxVal =  *<span class="hljs-built_in">max_element</span>(deliciousness.<span class="hljs-built_in">begin</span>(),deliciousness.<span class="hljs-built_in">end</span>());  <br>        <span class="hljs-keyword">int</span> maxSum = maxVal * <span class="hljs-number">2</span>;<br>        unordered_map&lt;<span class="hljs-keyword">int</span>,<span class="hljs-keyword">int</span>&gt;map;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> a:deliciousness)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> sum=<span class="hljs-number">1</span>; sum&lt;=maxSum; sum*=<span class="hljs-number">2</span>)&#123;<br>                <span class="hljs-keyword">int</span> num = map.<span class="hljs-built_in">count</span>(sum-a)? map[sum-a]:<span class="hljs-number">0</span>;<br>                result = (result + num) % MOD;<br>            &#125;<br>            map[a]++;<br>        &#125;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="参考-2"><a href="#参考-2" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sevenjoin/article/details/81943864">C++ map用法总结（整理）_sevenjoin的博客-CSDN博客_c++map</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/sword-/p/8036813.html">C++中Vector求最大值最小值 - 西瓜刀刀刀 - 博客园 (cnblogs.com)</a></li>
 </ul>
 
             </div>
