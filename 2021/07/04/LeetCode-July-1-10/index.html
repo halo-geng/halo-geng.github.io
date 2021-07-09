@@ -197,7 +197,7 @@ July 7 - 1711. 大餐计数
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4.2k 字
+      5k 字
     </span>
   
 
@@ -207,7 +207,7 @@ July 7 - 1711. 大餐计数
       <i class="iconfont icon-clock-fill"></i>
       
       
-      53
+      63
        分钟
     </span>
   
@@ -400,6 +400,37 @@ July 7 - 1711. 大餐计数
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sevenjoin/article/details/81943864">C++ map用法总结（整理）_sevenjoin的博客-CSDN博客_c++map</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/sword-/p/8036813.html">C++中Vector求最大值最小值 - 西瓜刀刀刀 - 博客园 (cnblogs.com)</a></li>
 </ul>
+<hr>
+<h3 id="July-8"><a href="#July-8" class="headerlink" title="July 8 -"></a>July 8 -</h3><hr>
+<h3 id="July-9-面试题-17-10-主要元素"><a href="#July-9-面试题-17-10-主要元素" class="headerlink" title="July 9 - 面试题 17.10. 主要元素"></a>July 9 - 面试题 17.10. 主要元素</h3><h4 id="描述-5"><a href="#描述-5" class="headerlink" title="描述"></a>描述</h4><p>数组中占比<strong>超过一半</strong>的元素称之为<strong>主要元素</strong>。给你一个 整数 数组，找出其中的主要元素。若没有，返回 -1 。请设计时间复杂度为 O(N) 、空间复杂度为 O(1) 的解决方案。</p>
+<h4 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h4><figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：[<span class="hljs-number">1,2,5,9</span>,<span class="hljs-number">5,9,5,5</span>,<span class="hljs-number">5</span>]<br>输出：<span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">输入：<span class="hljs-selector-attr">[3,2]</span><br>输出：-<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs less">输入：<span class="hljs-selector-attr">[2,2,2,3,3,4,4]</span><br>输出：<span class="hljs-selector-tag">-1</span> (元素<span class="hljs-number">2</span>的个数没有超过一半)<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="思路-5"><a href="#思路-5" class="headerlink" title="思路"></a>思路</h4><p>由于题目要求时间复杂度 O(n) 和空间复杂度 O(1)，因此符合要求的解法只有 Boyer-Moore 投票算法。</p>
+<p>Boyer-Moore 投票算法的基本思想是：在每一轮投票过程中，从数组中删除两个不同的元素，直到投票过程无法继续，此时数组为空或者数组中剩下的元素都相等。</p>
+<p>如果数组为空，则数组中不存在主要元素；</p>
+<p>如果数组中剩下的元素都相等，则数组中剩下的元素可能为主要元素。</p>
+<p>Boyer-Moore 投票算法的步骤如下：</p>
+<p>维护一个候选主要元素 candidate 和候选主要元素的出现次数 count，初始时 candidate 为任意值，count=0；</p>
+<p>遍历数组 nums 中的所有元素，遍历到元素 x 时，进行如下操作：</p>
+<p>如果 count=0，则将 x 的值赋给 candidate，否则不更新 candidate 的值；</p>
+<p>如果 x=candidate，则将 count 加 1，否则将 count 减 1。</p>
+<p>遍历结束之后，如果数组 nums 中存在主要元素，则 candidate 即为主要元素，否则 candidate 可能为数组中的任意一个元素。</p>
+<p>由于不一定存在主要元素，因此需要第二次遍历数组，验证 candidate 是否为主要元素。第二次遍历时，统计 candidate 在数组中的出现次数，如果出现次数大于数组长度的一半，则 candidate 是主要元素，返回 candidate，否则数组中不存在主要元素，返回 −1。</p>
+<p>为什么当数组中存在主要元素时，Boyer-Moore 投票算法可以确保得到主要元素？</p>
+<p>在 Boyer-Moore 投票算法中，遇到相同的数则将 count 加 1，遇到不同的数则将 count 减 1。根据主要元素的定义，主要元素的出现次数大于其他元素的出现次数之和，因此在遍历过程中，主要元素和其他元素两两抵消，最后一定剩下至少一个主要元素，此时 candidate 为主要元素，且 count≥1。</p>
+<h4 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//普通解法O(n),O(n)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement</span><span class="hljs-params">(vector&lt;<span class="hljs-keyword">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        unordered_map&lt;<span class="hljs-keyword">int</span>,<span class="hljs-keyword">int</span>&gt;map;<br>        <span class="hljs-keyword">int</span> max = nums.<span class="hljs-built_in">size</span>()/<span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">int</span> result = <span class="hljs-number">-1</span>;<br>        <span class="hljs-keyword">if</span>(nums.<span class="hljs-built_in">size</span>() == <span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-keyword">return</span> nums[<span class="hljs-number">0</span>];<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> &amp;a:nums)&#123;<br>            map[a]++;<br>            <span class="hljs-keyword">if</span>(map[a] &gt; max)&#123;<br>                result = a;<br>                max = map[a];<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//Boyer-Moore 投票算法 O(n),O(1)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement</span><span class="hljs-params">(vector&lt;<span class="hljs-keyword">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> candidate = <span class="hljs-number">-1</span>;<br>        <span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> a:nums)&#123;<br>            <span class="hljs-keyword">if</span>((count==<span class="hljs-number">0</span>)&amp;&amp;(a!=candidate))&#123;<br>                candidate=a;<br>                count++;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(a == candidate)&#123;<br>                count++;<br>            &#125;<br>            <span class="hljs-keyword">else</span>&#123;<br>                count--;<br>            &#125;<br>        &#125;<br>        count = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> b:nums)&#123;<br>            <span class="hljs-keyword">if</span>(b==candidate)&#123;<br>                count++;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(count&gt;nums.<span class="hljs-built_in">size</span>()/<span class="hljs-number">2</span>)&#123;<br>            <span class="hljs-keyword">return</span> candidate;<br>        &#125;<br>        <span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="参考-3"><a href="#参考-3" class="headerlink" title="参考"></a>参考</h4><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/find-majority-element-lcci/solution/zhu-yao-yuan-su-by-leetcode-solution-xr1p/">主要元素 - 主要元素 - 力扣（LeetCode） (leetcode-cn.com)</a></p>
 
             </div>
             <hr>
