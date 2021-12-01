@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon/favicon.png">
+  <link rel="icon" href="/img/icon/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="【转载】volatile与内存屏障总结
+原文地址：volatile与内存屏障总结 - 知乎 (zhihu.com)
+作者：郑传军 - 知乎 (zhihu.com)">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>volatile与内存屏障总结 - 老君的借火岩</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>老君的借火岩</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg/wenzhang.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="volatile与内存屏障总结">
+              
+                volatile与内存屏障总结
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-01 13:48" pubdate>
+        2021年12月1日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      43
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">volatile与内存屏障总结</h1>
+            
+            <div class="markdown-body">
+              <p>【转载】volatile与内存屏障总结</p>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43526907">volatile与内存屏障总结 - 知乎 (zhihu.com)</a></p>
+<p>作者：<a target="_blank" rel="noopener" href="https://www.zhihu.com/people/zheng-chuan-jun">郑传军 - 知乎 (zhihu.com)</a></p>
+<span id="more"></span>
+
+<hr>
+<div class="RichText ztext Post-RichText css-hnrfcf" options="[object Object]"><h2>一. 内存屏障 Memory Barrior </h2><p data-pid="JieD8Ia1"><b>1.1 重排序</b></p><p data-pid="bWTHTESn">同步的目的是保证不同执行流对共享数据并发操作的一致性。在单核时代，使用原子变量就很容易达成这一目的。甚至因为CPU的一些访存特性，对某些内存对齐数据的读或写也具有原子的特性。但在多核架构下即使操作是原子的，仍然会因为其他原因导致同步失效。</p><p data-pid="oS5AEWyu">首先是现代编译器的代码优化和编译器指令重排可能会影响到代码的执行顺序。</p><p data-pid="sgpl4n_o">其次还有指令执行级别的乱序优化，流水线、<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8C&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">乱序执行<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>、分支预测都可能导致处理器次序（Process Ordering，机器指令在CPU实际执行时的顺序）和<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E7%A8%8B%E5%BA%8F%E6%AC%A1%E5%BA%8F&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">程序次序<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>（Program Ordering，程序代码的逻辑执行顺序）不一致。可惜不影响语义依旧只能是保证单核指令序列间，<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8D%95%E6%A0%B8%E6%97%B6%E4%BB%A3CP&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">单核时代CP<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>U的Self-Consistent特性在<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%A4%9A%E6%A0%B8%E6%97%B6%E4%BB%A3&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">多核时代<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>已不存在（Self-Consistent即重排原则：有数据依赖不会进行重排，单核最终结果肯定一致）。</p><p data-pid="ZC_XzXna">除此还有硬件级别Cache一致性（Cache Coherence）带来的问题：CPU架构中传统的MESI协议中有两个行为的执行成本比较大。一个是将某个Cache Line标记为Invalid状态，另一个是当某Cache Line当前状态为Invalid时写入新的数据。所以CPU通过Store Buffer和Invalidate Queue组件来降低这类操作的延时。如图：</p><figure data-size="normal"><noscript><img src="https://pic1.zhimg.com/v2-326ce3092f7c80cb4b20177724cdc8e4_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="402" data-rawheight="424" class="content_image" width="402"/></noscript><img src="https://pic1.zhimg.com/80/v2-326ce3092f7c80cb4b20177724cdc8e4_720w.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="402" data-rawheight="424" class="content_image lazy" width="402" data-actualsrc="https://pic1.zhimg.com/v2-326ce3092f7c80cb4b20177724cdc8e4_b.jpg" data-lazy-status="ok"></figure><p data-pid="d54vbxKt">当一个核心在Invalid状态进行写入时，首先会给其它CPU核发送Invalid消息，然后把当前写入的数据写入到Store Buffer中。然后异步在某个时刻真正的写入到Cache Line中。当前CPU核如果要读Cache Line中的数据，需要先扫描Store Buffer之后再读取Cache Line（Store-Buffer Forwarding）。但是此时其它CPU核是看不到当前核的Store Buffer中的数据的，要等到Store Buffer中的数据被刷到了Cache Line之后才会触发失效操作。</p><p data-pid="M-ZbAXsP">而当一个CPU核收到Invalid消息时，会把消息写入自身的Invalidate Queue中，随后异步将其设为Invalid状态。和Store Buffer不同的是，当前CPU核心使用Cache时并不扫描Invalidate Queue部分，所以可能会有极短时间的脏读问题。这里的Store Buffer和Invalidate Queue的说法是针对一般的SMP架构来说的，不涉及具体架构。</p><p data-pid="BWXtadfd">内存对于缓存更新策略，要区分Write-Through和Write-Back两种策略。前者更新内容直接写内存并不同时更新Cache，但要置Cache失效，后者先更新Cache，随后异步更新内存。通常X86 CPU更新内存都使用Write-Back策略。</p><p data-pid="sVtML40P"><b>1.2 <span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E7%BC%96%E8%AF%91%E5%99%A8%E5%B1%8F%E9%9A%9C&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">编译器屏障<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span> Compiler Barrior</b></p><div class="highlight"><pre><code class="language-cpp"><span class="cm">/* The "volatile" is due to gcc bugs */</span>
+<span class="cp">#define barrier() __asm__ __volatile__("": : :"memory") 
+</span></code></pre></div><p data-pid="upHBkaGr">阻止编译器重排，保证编译程序时在优化屏障之前的指令不会在优化屏障之后执行。</p><p data-pid="bCwqxrh6"><b>1.3 CPU屏障 CPU Barrior</b></p><p data-pid="Hdm9jGNj">CPU级别内存屏障其作用有两个：</p><ol><li data-pid="v30mq1ju">防止指令之间的重排序</li><li data-pid="r1SXS1HE">保证数据的可见性</li></ol><p data-pid="BxNb85vX">指令重排中Load和Store两种操作会有Load-Store、Store-Load、Load-Load、Store-Store这四种可能的乱序结果。</p><p data-pid="h1OEXPIx">Intel为此提供三种内存屏障指令：</p><ul><li data-pid="m4VR7B5P">sfence ，实现Store Barrior 会将store buffer中缓存的修改刷入L1 cache中，使得其他cpu核可以观察到这些修改，而且之后的写操作不会被调度到之前，即sfence之前的写操作一定在sfence完成且全局可见；</li><li data-pid="XfaUXVOA">lfence ，实现Load Barrior  会将invalidate queue失效，强制读取入L1 cache中，而且lfence之后的读操作不会被调度到之前，即lfence之前的读操作一定在lfence完成（并未规定全局可见性）；</li><li data-pid="tk5P5i89">mfence  ，实现Full Barrior  同时刷新store buffer和invalidate queue，保证了mfence前后的读写操作的顺序，同时要求mfence之后写操作结果全局可见之前，mfence之前写操作结果全局可见；</li><li data-pid="RGCH9x4S">lock 用来修饰当前指令操作的内存只能由当前CPU使用，若指令不操作内存仍然由用，因为这个修饰会让指令操作本身原子化，而且自带Full Barrior效果；还有指令比如IO操作的指令、exch等原子交换的指令，任何带有lock前缀的指令以及CPUID等指令都有内存屏障的作用。</li></ul><p data-pid="2w2zPG_-">X86-64下仅支持一种指令重排：Store-Load ，即读操作可能会重排到写操作前面，同时不同线程的写操作并没有保证全局可见，例子见《Intel® <span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=64+and+IA-32+Architectures+Software+Developer%E2%80%99s+Manual&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">64 and IA-32 Architectures Software Developer’s Manual<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>》手册8.6.1、8.2.3.7节。要注意的是这个问题只能用mfence解决，不能靠组合sfence和lfence解决。（用sfence+lfence组合仅可以解决重排问题，但不能解决全局可见性问题，简单理解不如视为sfence和lfence本身也能乱序重拍）</p><p data-pid="UZVlB_aw">X86-64一般情况根本不会需要使用lfence与sfence这两个指令，除非操作Write-Through内存或使用 non-temporal 指令（NT指令，属于SSE指令集），比如movntdq, movnti, maskmovq，这些指令也使用Write-Through内存策略，通常使用在图形学或视频处理，Linux编程里就需要使用GNC提供的专门的函数（例子见参考资料13：Memory part 5: What programmers can do）。</p><p data-pid="OS-BF0_p">下面是GNU中的三种内存屏障定义方法，结合了编译器屏障和三种CPU屏障指令</p><div class="highlight"><pre><code class="language-cpp"><span class="cp">#define lfence() __asm__ __volatile__("lfence": : :"memory") 
+</span><span class="cp">#define sfence() __asm__ __volatile__("sfence": : :"memory") 
+</span><span class="cp">#define mfence() __asm__ __volatile__("mfence": : :"memory") 
+</span></code></pre></div><p data-pid="nnsB2DUa">代码中仍然使用lfence()与sfence()这两个内存屏障应该也是一种长远的考虑。按照Interface写代码是最保险的，万一Intel以后出一个采用弱一致模型的CPU，遗留代码出问题就不好了。目前在X86下面视为编译器屏障即可。</p><p data-pid="QU2nV9AG">GCC 4以后的版本也提供了Built-in的<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%B1%8F%E9%9A%9C%E5%87%BD%E6%95%B0&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">屏障函数<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span><code>__sync_synchronize()</code>，这个屏障函数既是编译屏障又是内存屏障，代码插入这个函数的地方会被安插一条<code>mfence</code>指令。</p><p data-pid="gF26ub0P">C++11为内存屏障提供了专门的函数std::atomic_thread_fence，方便移植统一行为而且可以配合内存模型进行设置，比如实现Acquire-release语义：</p><div class="highlight"><pre><code class="language-text">#include &lt;atomic&gt;
+std::atomic_thread_fence(std::memory_order_acquire);
+std::atomic_thread_fence(std::memory_order_release);</code></pre></div><h2><b>二、内存模型</b></h2><p data-pid="GWjG2li6"><b>2.1 Acquire与Release语义</b></p><ul><li data-pid="k1ViPStT">对于Acquire来说，保证Acquire后的读写操作不会发生在Acquire动作之前</li><li data-pid="28om1o8n">对于Release来说，保证Release前的读写操作不会发生在Release动作之后</li></ul><p data-pid="X5RqI7HG">Acquire &amp; Release 语义保证内存操作仅在acquire和<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=release%E5%B1%8F%E9%9A%9C&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">release屏障<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>之间发生</p><figure data-size="normal"><noscript><img src="https://pic1.zhimg.com/v2-8097a3f0f061de5d9163b3cd5bf09788_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="618" data-rawheight="231" class="origin_image zh-lightbox-thumb" width="618" data-original="https://pic1.zhimg.com/v2-8097a3f0f061de5d9163b3cd5bf09788_r.jpg"/></noscript><img src="https://pic1.zhimg.com/80/v2-8097a3f0f061de5d9163b3cd5bf09788_720w.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="618" data-rawheight="231" class="origin_image zh-lightbox-thumb lazy" width="618" data-original="https://pic1.zhimg.com/v2-8097a3f0f061de5d9163b3cd5bf09788_r.jpg" data-actualsrc="https://pic1.zhimg.com/v2-8097a3f0f061de5d9163b3cd5bf09788_b.jpg" data-lazy-status="ok"></figure><p data-pid="Kz0Du5Om">X86-64中Load读操作本身满足Acquire语义，Store写操作本身也是满足Release语义。但Store-Load操作间等于没有保护，因此仍需要靠mfence或lock等指令才可以满足到Synchronizes-with规则。</p><p data-pid="sTJF8pKY"><b>2.2 happens-before规则</b></p><figure data-size="normal"><noscript><img src="https://pic3.zhimg.com/v2-e3f58a13d0bdaff8c1221883df4418f6_b.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="618" data-rawheight="282" class="origin_image zh-lightbox-thumb" width="618" data-original="https://pic3.zhimg.com/v2-e3f58a13d0bdaff8c1221883df4418f6_r.jpg"/></noscript><img src="https://pic3.zhimg.com/80/v2-e3f58a13d0bdaff8c1221883df4418f6_720w.jpg" srcset="/img/loading.gif" lazyload data-caption="" data-size="normal" data-rawwidth="618" data-rawheight="282" class="origin_image zh-lightbox-thumb lazy" width="618" data-original="https://pic3.zhimg.com/v2-e3f58a13d0bdaff8c1221883df4418f6_r.jpg" data-actualsrc="https://pic3.zhimg.com/v2-e3f58a13d0bdaff8c1221883df4418f6_b.jpg" data-lazy-status="ok"></figure><p data-pid="QVSDcqbG">相对于Synchronizes-with规则更宽松，happens-before规则定义指令执行顺序与变量的可见性，类似偏序关系，具有可传递性，因此可以运用于并行逻辑分析。</p><p data-pid="2l_fiGVn"><b>2.3 内存一致性模型 Memory Model</b></p><p data-pid="gqF5T-zu">内存一致性模型从程序员视角，由内存序Memory Ordering和写操作原子性Store Atomicity来定义，针对不同线程中原子操作的全局顺序：</p><ul><li data-pid="NBvKU9FF">Strong Consistency / Sequential consistency  顺序一致性</li><li data-pid="UmQvtod-">Release Consistency /  release-acquire / release-consume </li><li data-pid="4yvpfSST">Relaxed Consistency</li></ul><p data-pid="LwGL9jgz">C++11相应定义了6种内存模型：</p><ul><li data-pid="AOBF2-nt">std::memory_order_seq_cst  所有读写操作不能跨过，写顺序全线程可见</li><li data-pid="hJT7bQgc">std::memory_order_acq_rel 所有读写操作不能跨过，写顺序仅同步线程间可见、std::memory_order_release 所有读写操作不能往后乱序、std::memory_order_acquire 所有读写操作不能向前乱序、std::memory_order_consume 依赖该读操作的后续读写操作不能向前乱序</li><li data-pid="5ft5Za5S">std::memory_order_relaxed 无特殊要求</li></ul><h2>三. volatile 关键字</h2><p data-pid="EjYcKGqs">voldatile关键字首先具有“易变性”，声明为volatile变量编译器会强制要求读内存，相关语句不会直接使用上一条语句对应的的寄存器内容，而是重新从内存中读取。</p><p data-pid="XJVx9R-K">其次具有”不可优化”性，volatile告诉编译器，不要对这个变量进行各种激进的优化，甚至将变量直接消除，保证代码中的指令一定会被执行。</p><p data-pid="CkUG_P9l">最后具有“顺序性”，能够保证Volatile变量间的顺序性，编译器不会进行乱序优化。不过要注意与非volatile变量之间的操作，还是可能被编译器重排序的。</p><p data-pid="TJDntWzb">需要注意的是其含义跟原子操作无关，比如：volatile int a; a++;  其中a++操作实际对应三条汇编指令实现”读-改-写“操作（RMW），并非原子的。</p><blockquote data-pid="qJjD7IPa">思考：bool类型是不是适合使用，不会出问题。</blockquote><p data-pid="1TDBltk1">不同编程语言中voldatile含义与实现并不完全相同，Java语言中<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=voldatile%E5%8F%98%E9%87%8F&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">voldatile变量<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>可以被看作是一种轻量级的同步，因其还附带了acuire和release语义。实际上也是从JDK5以后才通过这个措施进行完善，其volatile 变量具有 synchronized 的可见性特性，但是不具备原子特性。Java语言中有volatile修饰的变量，赋值后多执行了一个“load addl $0x0, (%esp)”操作，这个操作相当于一个<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=lock%E6%8C%87%E4%BB%A4&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">lock指令<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>，就是增加一个完全的内存屏障指令，这点与C++实现并不一样。volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。</p><p data-pid="vNoSgFSG">Java实践中仅满足下面这些条件才应该使用volatile关键字：</p><ul><li data-pid="TRlGJwIB">变量写入操作不依赖变量当前值，或确保只有一个线程更新变量的值（Java可以，C++仍然不能）</li><li data-pid="TqY43nFv">该变量不会与其他变量一起纳入</li><li data-pid="0pqqjvLG">变量并未被锁保护</li></ul><p data-pid="T4mRIVrZ">C++中voldatile等于插入编译器级别屏障，因此并不能阻止CPU硬件级别导致的重排。C++11 中volatile语义没有任何变化，不过提供了std::atomic工具可以真正实现原子操作，而且默认加入了内存屏障（可以通过在store与load操作时设置内存模型参数进行调整，默认为std::memory_order_seq_cst）。</p><p data-pid="SHhIKDhL">C++实践中推荐涉及并发问题都使用std::atomic，只有涉及特殊内存操作的时候才使用volatile关键字。这些情况通常IO相关，防止相关操作被编译器优化，也是volatile关键字发明的本意。</p><h2>四、使用经验</h2><p data-pid="t1Ir2Ctz">内存屏障相关并行逻辑使用的分析顺序：线程安全、操作原子性、存储器操作顺序</p><p data-pid="qagqv1WN">C++ 使用对齐变量与mfence</p><p data-pid="7oo3-drA">C++11  使用std::atomic与std::atomic_thread_fence，先使用默认std::memory_order_seq_cst模型再进行相关优化</p><p data-pid="Mq2po_zo">Java 使用volatile或atomic</p><p data-pid="w3LBj_Wl">一个经典的例子就是DCL双重检查加锁实现单例模式，本意是想要实现延迟初始化</p><div class="highlight"><pre><code class="language-java"><span class="nd">@NotThreadSafe</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DoubleCheckedLock</span> <span class="o">&#123;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Resource</span> <span class="n">resoure</span><span class="o">;</span>
+
+<pre><code>&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Resource&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&#123;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&#123;&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DoubleCheckedLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&#123;&lt;/span&gt;
+             &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                 &lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;&#125;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&#125;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&#125;&lt;/span&gt;
+</code></pre>
+<p><span class="o">}</span></code></pre></div><p data-pid="9gCRtOeC">问题在于未同步状态下读共享变量，可能获取的是中间值，比如这里获取的<span><a data-za-not-track-link="true" target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=resource%E5%AF%B9%E8%B1%A1&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22article%22%2C%22sourceId%22%3A43526907%7D" class="css-1occaib">resource对象<svg width="8px" height="8px" viewBox="0 0 15 15" class="css-ukqak1"><path d="M10.89 9.477l3.06 3.059a1 1 0 0 1-1.414 1.414l-3.06-3.06a6 6 0 1 1 1.414-1.414zM6 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path></svg></a></span>可能还未完全构造好。尽管JDK5以后声明为volatile可以避免这个问题，但DCL已经没有必要，因为Java可以利用JVM内部静态类装载的特点实现“延迟初始化占位类模式”来达到同样的效果。C++下面可以使用pthread_once实现。</p><p data-pid="cYLF9OI4">后续：同步原语使用（锁、信号量等）、Lockfree与非阻塞操作</p><h2>参考文章：</h2><ol><li data-pid="iWaFv7Aj"><a href="http://hedengcheng.com/?p=725" class=" wrap external" target="_blank" rel="nofollow noreferrer">C/C++ Volatile关键词深度剖析</a></li><li data-pid="CplUl1OF"><a href="https://www.jianshu.com/p/ef8de88b1343" class=" wrap external" target="_blank" rel="nofollow noreferrer">java的并发关键字volatile</a></li><li data-pid="nR5W1bgu"><a href="https://www.jianshu.com/p/c6f190018db1" class=" wrap external" target="_blank" rel="nofollow noreferrer">指令重排序</a></li><li data-pid="c2i7Izh0"><u><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35386457" class="internal">多处理器编程：从缓存一致性到内存模型</a></u></li><li data-pid="nNVIj5zd"><a href="http://0xffffff.org/2017/02/21/40-atomic-variable-mutex-and-memory-barrier/" class=" wrap external" target="_blank" rel="nofollow noreferrer">聊聊原子变量、锁、内存屏障那点事</a></li><li data-pid="aVty0lgO"><u><a href="http://www.wowotech.net/kernel_synchronization/Why-Memory-Barriers.html" class=" wrap external" target="_blank" rel="nofollow noreferrer">Why Memory Barriers？中文翻译（上）</a></u></li><li data-pid="HyN2_VH1"><u><a href="https://blog.csdn.net/carltraveler/article/details/39055321" class=" wrap external" target="_blank" rel="nofollow noreferrer">LINUX内核内存屏障</a></u></li><li data-pid="v2xtcFHQ"><u><a href="https://github.com/GHScan/TechNotes/blob/master/2017/Memory_Model.md#references" class=" wrap external" target="_blank" rel="nofollow noreferrer">Memory Model: 从多处理器到高级语言</a></u></li><li data-pid="aP7DTcvg"><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/48157076" class="internal">高并发编程–多处理器编程中的一致性问题(上)</a></li><li data-pid="1ZOTGuZL"><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/48161056" class="internal">高并发编程–多处理器编程中的一致性问题(下)</a></li><li data-pid="ZaHN0RgI"><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/24301047" class="internal">如何理解C++11中的六种内存模型</a></li><li data-pid="mrCbl-Dz"><u><a href="https://www.cl.cam.ac.uk/~pes20/cpp/cpp0xmappings.html" class=" wrap external" target="_blank" rel="nofollow noreferrer">C/C++11 mappings to processors</a></u></li><li data-pid="ZkBPrCPb"><a href="https://stackoverflow.com/questions/4537753/when-should-i-use-mm-sfence-mm-lfence-and-mm-mfence" class=" wrap external" target="_blank" rel="nofollow noreferrer">When should I use _mm_sfence _mm_lfence and _mm_mfence</a></li><li data-pid="GfsAozwZ"><a href="https://stackoverflow.com/questions/27627969/why-is-or-isnt-sfence-lfence-equivalent-to-mfence/50322404#50322404" class=" wrap external" target="_blank" rel="nofollow noreferrer">Why is (or isn’t?) SFENCE + LFENCE equivalent to MFENCE?</a></li><li data-pid="Qrgv3LlC"><u><a href="https://lwn.net/Articles/255364/" class=" wrap external" target="_blank" rel="nofollow noreferrer">Memory part 5: What programmers can do</a></u></li><li data-pid="4NElzGRW"><a href="http://preshing.com/20120515/memory-reordering-caught-in-the-act/" class=" wrap external" target="_blank" rel="nofollow noreferrer">Memory Reordering Caught in the Act</a> </li><li data-pid="wxZPEnLl"><a href="http://www.aristeia.com/Papers/DDJ_Jul_Aug_2004_revised.pdf" class=" wrap external" target="_blank" rel="nofollow noreferrer">C++ and the Perils of Double-Checked Locking</a></li></ol></div></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/LeetCode/">LeetCode</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Sort/">Sort</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/06/LeetCode-DP-1/">
+                        <span class="hidden-mobile">LeetCode-DP-1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <span>
+      <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+        津ICP备20003724号
+      </a>
+    </span>
+    
+      
+        <span>
+          <a
+            href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=12011202000392"
+            rel="nofollow noopener"
+            class="beian-police"
+            target="_blank"
+          >
+            
+              <span style="visibility: hidden; width: 0">|</span>
+              <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+            
+            <span>津公网安备12011202000392号</span>
+          </a>
+        </span>
+      
+    
+  </div>
+
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
