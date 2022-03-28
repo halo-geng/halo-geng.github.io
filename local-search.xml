@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>[Work] 操作系统 面试问题整理</title>
+    <link href="/2022/03/27/work-OS/"/>
+    <url>/2022/03/27/work-OS/</url>
+    
+    <content type="html"><![CDATA[<h4 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h4><p>线程是程序执行的最小单位，而进程是操作系统分配资源的最小单位；一个进程由一个或多个线程组成，线程是一个进程中代码的不同执行路线；进程之间相互独立，但同一进程下的各个线程之间共享程序的内存空间(包括代码段，数据集，堆等)及一些进程级的资源(如打开文件和信号等)，某进程内的线程在其他进程不可见；调度和切换：线程上下文切换比进程上下文切换要快得多；</p><p><a href="https://blog.csdn.net/weixin_44747933/article/details/111398906">(24条消息) 线程间到底共享了哪些进程资源？_程序员资源社区的博客-CSDN博客</a></p><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485646&idx=1&sn=ab57d6e2e66affefc104e04740356b39&chksm=cfe9944ef89e1d58a87c295cf1c54f78c39238214405b446c8bf4f4371fc29e0fd8d2b3cf9a6&cur_album_id=1923404049802985480&scene=190#rd">送命题：进程切换与线程切换的区别？ (qq.com)</a></p><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485705&idx=1&sn=1845875575601b23ed5cea0579c1f77e&chksm=cfe99589f89e1c9fdebda0327fd74f181ae693d43fb098ae55c84839bed810c6008cd201ac45#rd">看完这篇还不懂高并发中的线程与线程池你来打我(内含20张图) (qq.com)</a></p><p><a href="https://blog.csdn.net/21cnbao/article/details/108860584">(24条消息) 深入理解Linux内核进程上下文切换_宋宝华的博客-CSDN博客</a></p><h4 id="fork和exec"><a href="#fork和exec" class="headerlink" title="fork和exec"></a>fork和exec</h4><p><a href="https://cloud.tencent.com/developer/ask/28101">fork和exec之间的区别？ - 问答 - 云+社区 - 腾讯云 (tencent.com)</a></p><p><a href="https://rebootcat.com/2020/11/21/fork_copy_thread/">fork会复制线程吗 | 林夕水共 (rebootcat.com)</a></p><p><a href="https://www.cnblogs.com/liyuan989/p/4279210.html">谨慎使用多线程中的fork - origins - 博客园 (cnblogs.com)</a></p><h4 id="进程间通讯"><a href="#进程间通讯" class="headerlink" title="进程间通讯"></a>进程间通讯</h4><p><a href="https://www.cnblogs.com/LUO77/p/5816326.html">进程间通信的方式——信号、管道、消息队列、共享内存 - 0giant - 博客园 (cnblogs.com)</a></p><h4 id="协程的概念"><a href="#协程的概念" class="headerlink" title="协程的概念"></a>协程的概念</h4><p><a href="https://www.jianshu.com/p/6dde7f92951e">协程 - 简书 (jianshu.com)</a></p><h4 id="堆栈的区别"><a href="#堆栈的区别" class="headerlink" title="堆栈的区别"></a>堆栈的区别</h4><p>①栈主要存储局部变量（比如局部的数据和for循环中的数据体），堆主要存储实体（数组，列表等等）</p><p>②栈的内存更新速度会快，因为局部变量的生命周期很短，堆的内存更新会慢一些实体的生命周期长。</p><p>③栈的生命周期短一旦被释放就会被摧毁，但是堆的实体生命周期长，内存空间会被回收机制不定时回收和释放</p><h4 id="内核栈"><a href="#内核栈" class="headerlink" title="内核栈"></a>内核栈</h4><p><a href="https://blog.csdn.net/yangkuanqaz85988/article/details/52403726">(24条消息) Linux 中的各种栈：进程栈 线程栈 内核栈 中断栈_木易博客专栏-CSDN博客_内核栈</a></p><h4 id="程序运行时内存"><a href="#程序运行时内存" class="headerlink" title="程序运行时内存"></a>程序运行时内存</h4><p><a href="https://blog.csdn.net/weixin_30411997/article/details/99177171">(24条消息) 程序运行时的内存分配情况_weixin_30411997的博客-CSDN博客</a></p><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485714&idx=1&sn=1a315fe4da87fde2758fc9dd5366ba01&source=41#wechat_redirect">函数运行时在内存中是什么样子？ (qq.com)</a></p><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485655&idx=1&sn=5d757e85565fdd61c58321eccf2dfb83&chksm=cfe99457f89e1d4125618077ecfd36baa2dedd7d80e01dd050434a88d77828445c625866c2a7&cur_album_id=1923404049802985480&scene=189#wechat_redirect">程序员应如何理解内存：下篇 (qq.com)</a></p><img src="操作系统.assets/640" alt="图片" style="zoom:50%;" /><h4 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h4><p><a href="https://leetcode-cn.com/leetbook/read/awesome-os-guide/egfu3i/">硬核操作系统指南 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台 (leetcode-cn.com)</a></p><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485719&idx=1&sn=29d47752010326eb02edf6dadd505d4c&chksm=cfe99597f89e1c816425848abdf6ad01172a3b22136182e6aa75695f51531a00aff033808aa4#rd">神秘！申请内存时底层发生了什么？ (qq.com)</a></p><h4 id="mmap系统调用"><a href="#mmap系统调用" class="headerlink" title="mmap系统调用"></a>mmap系统调用</h4><p><a href="https://www.cnblogs.com/huxiao-tee/p/4660352.html">认真分析mmap：是什么 为什么 怎么用 - 胡潇 - 博客园 (cnblogs.com)</a></p><h4 id="用户态和内核态"><a href="#用户态和内核态" class="headerlink" title="用户态和内核态"></a>用户态和内核态</h4><p><a href="https://zhuanlan.zhihu.com/p/69554144">怎样去理解Linux用户态和内核态？ - 知乎 (zhihu.com)</a></p><p><a href="https://www.cnblogs.com/Anker/p/3269106.html">用户空间与内核空间，进程上下文与中断上下文总结 - Rabbit_Dale - 博客园 (cnblogs.com)</a></p><h4 id="软中断和硬中断"><a href="#软中断和硬中断" class="headerlink" title="软中断和硬中断"></a>软中断和硬中断</h4><p><a href="https://www.jianshu.com/p/52a3ee40ea30">软中断和硬中断 - 简书 (jianshu.com)</a></p><h4 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h4><p><a href="https://www.jianshu.com/p/b19a7c46f465">DMA详解 - 简书 (jianshu.com)</a></p><p><a href="https://blog.csdn.net/qq_34901049/article/details/108587975">(24条消息) DMA（Direct Memory Access，直接存储器访问）_破晓的成长之路-CSDN博客</a></p><h4 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h4><p><a href="https://blog.csdn.net/nrsc272420199/article/details/105032873">(24条消息) 【并发编程】 — Compare And Swap（CAS）原理分析_nrsc-CSDN博客_compareandswap</a></p><h4 id="I-O，零拷贝，PageCache"><a href="#I-O，零拷贝，PageCache" class="headerlink" title="I/O，零拷贝，PageCache"></a>I/O，零拷贝，PageCache</h4><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485706&idx=1&sn=bc5d6e4bf9ee5dccef520e5b2051d943&source=41#wechat_redirect">读取文件时，程序经历了什么？ (qq.com)</a></p><p><a href="https://zhuanlan.zhihu.com/p/258513662">原来 8 张图，就可以搞懂「零拷贝」了 - 知乎 (zhihu.com)</a></p><p><a href="https://blog.csdn.net/rusbme/article/details/111877653">(24条消息) 三种IO模式和Page Cache的关系_天行九歌-CSDN博客</a></p><p><a href="https://blog.csdn.net/jyxmust/article/details/88354485">(24条消息) 浅谈Buffer I/O 和 Direct I/O_w-CSDN博客_buffer io</a></p><h4 id="I-O多路复用"><a href="#I-O多路复用" class="headerlink" title="I/O多路复用"></a>I/O多路复用</h4><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485708&idx=1&sn=d7c8bec26de6ddcaaff49eac0766dc87&source=41#wechat_redirect">终于明白了，一文彻底理解I/O多路复用 (qq.com)</a></p><h4 id="VFS"><a href="#VFS" class="headerlink" title="VFS"></a>VFS</h4><p><a href="https://zhuanlan.zhihu.com/p/69289429">浅谈Linux虚拟文件系统 - 知乎 (zhihu.com)</a></p><h4 id="MMIO和PMIO"><a href="#MMIO和PMIO" class="headerlink" title="MMIO和PMIO"></a>MMIO和PMIO</h4><p><a href="https://www.cnblogs.com/idorax/p/7691334.html">浅谈内存映射I/O(MMIO)与端口映射I/O(PMIO)的区别 - veli - 博客园 (cnblogs.com)</a></p><h4 id="swap分区"><a href="#swap分区" class="headerlink" title="swap分区"></a>swap分区</h4><p><a href="https://blog.csdn.net/qq_36838191/article/details/86539058">(24条消息) Linux交换空间（swap space）_GoodIdea-CSDN博客_swap空间</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Work</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Operating System</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>[Work] C++ 面试问题整理</title>
+    <link href="/2022/03/27/work-C++/"/>
+    <url>/2022/03/27/work-C++/</url>
+    
+    <content type="html"><![CDATA[<h4 id="C-的内存管理"><a href="#C-的内存管理" class="headerlink" title="C++的内存管理"></a>C++的内存管理</h4><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485653&idx=1&sn=24a27455af32fdf97f6787e4a29e856a&chksm=cfe99455f89e1d439f17ad9861e37ed9e908cde24a4e96b50a3fefd72f252ef790b7718a75b6&cur_album_id=1923404049802985480&scene=189#wechat_redirect">程序员应如何理解内存：上篇 (qq.com)</a></p><h4 id="malloc和new的区别"><a href="#malloc和new的区别" class="headerlink" title="malloc和new的区别"></a>malloc和new的区别</h4><p><a href="https://blog.csdn.net/qq_40840459/article/details/81268252">(24条消息) 动态内存分配、malloc与new的区别_Demons的博客-CSDN博客_malloc和new的区别</a></p><p><a href="https://www.cnblogs.com/QG-whz/p/5140930.html">细说new与malloc的10点区别 - melonstreet - 博客园 (cnblogs.com)</a></p><h4 id="确定类大小"><a href="#确定类大小" class="headerlink" title="确定类大小"></a>确定类大小</h4><p><a href="https://blog.csdn.net/u012733215/article/details/44888099">(24条消息) 如何计算C++类占用内存大小_3D Matrix-CSDN博客</a></p><h4 id="内存对齐"><a href="#内存对齐" class="headerlink" title="内存对齐"></a>内存对齐</h4><p><a href="https://zhuanlan.zhihu.com/p/30007037">C/C++内存对齐详解 - 知乎 (zhihu.com)</a></p><h4 id="指针和引用"><a href="#指针和引用" class="headerlink" title="指针和引用"></a>指针和引用</h4><p><a href="https://www.runoob.com/w3cnote/cpp-difference-between-pointers-and-references.html">C++ 中指针和引用的区别 | 菜鸟教程 (runoob.com)</a></p><p><a href="https://www.zhihu.com/question/37608201">(27 封私信 / 80 条消息) c++中，引用和指针的区别是什么？ - 知乎 (zhihu.com)</a></p><h4 id="static"><a href="#static" class="headerlink" title="static"></a>static</h4><p><a href="https://www.runoob.com/w3cnote/cpp-static-usage.html">C/C++ 中 static 的用法全局变量与局部变量 | 菜鸟教程 (runoob.com)</a></p><p><a href="https://blog.csdn.net/ypshowm/article/details/89030194">(24条消息) c++中static的作用_ypshowm的博客-CSDN博客_c++ static</a></p><h4 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h4><p><a href="https://www.jianshu.com/p/e4919f1c3a28">C++11 智能指针 - 简书 (jianshu.com)</a></p><h4 id="STL-Vector实现原理"><a href="#STL-Vector实现原理" class="headerlink" title="STL-Vector实现原理"></a>STL-Vector实现原理</h4><p><a href="https://www.cnblogs.com/418ks/p/14707199.html">C++ vector实现原理 - 我是团长 - 博客园 (cnblogs.com)</a></p><h4 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h4><p><a href="http://www.360doc.com/content/16/0709/22/34965413_574350874.shtml">C 面向对象的三个基本特征 (360doc.com)</a></p><h4 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h4><p><a href="https://www.cnblogs.com/Allen-rg/p/6999360.html">C++ 四种强制类型转换 - 静悟生慧 - 博客园 (cnblogs.com)</a></p><h4 id="拷贝构造函数-vs-赋值运算符"><a href="#拷贝构造函数-vs-赋值运算符" class="headerlink" title="拷贝构造函数 vs 赋值运算符"></a>拷贝构造函数 vs 赋值运算符</h4><p>拷贝构造函数和赋值运算符的行为比较相似，都是将一个对象的值复制给另一个对象，但是其结果却有些不同，拷贝构造函数使用传入对象的值生成一个新的对象的实例，而赋值运算符是将对象的值复制给一个<strong>已经存在的实例。</strong>这种区别从两者的名字也能轻易的分辨出来，拷贝构造函数也是一种构造函数，那么它的功能就是创建一个新的对象实例；赋值运算符是执行某种运算，将一个对象的值复制给另一个对象（已经存在的）。<strong>调用的是拷贝构造函数还是赋值运算符，主要是看是否有新的对象实例产生，如果产生了新的对象实例，那调用的就是拷贝构造函数；如果没有，那就是对已有的对象赋值，调用的是赋值运算符。</strong></p><p><a href="https://www.cnblogs.com/cxq0017/p/10620273.html">C++ 拷贝构造函数和赋值运算符 - evilsnake - 博客园 (cnblogs.com)</a></p><h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><p><a href="https://www.runoob.com/w3cnote/c-dynamic-array.html">C 语言动态数组 | 菜鸟教程 (runoob.com)</a></p><h4 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h4><p><a href="https://zhuanlan.zhihu.com/p/104605966">C++ 一篇搞懂多态的实现原理 - 知乎 (zhihu.com)</a></p><p><a href="https://blog.csdn.net/haoel/article/details/1948051">(24条消息) C++ 虚函数表解析_陈皓专栏　【空谷幽兰，心如皓月】-CSDN博客_虚函数表</a></p><p><a href="https://leehao.me/C-%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8%E5%89%96%E6%9E%90/">C++虚函数表剖析 | Leo的博客 (leehao.me)</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Work</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>volatile与内存屏障总结</title>
     <link href="/2021/12/01/volatile/"/>
     <url>/2021/12/01/volatile/</url>
@@ -23,19 +73,6 @@
       <tag>Sort</tag>
       
     </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>LeetCode-DP-1</title>
-    <link href="/2021/08/06/LeetCode-DP-1/"/>
-    <url>/2021/08/06/LeetCode-DP-1/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
     
   </entry>
   
